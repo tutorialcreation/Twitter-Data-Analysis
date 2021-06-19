@@ -23,7 +23,7 @@ def read_json(json_file: str)->list:
 
 class Tweet_df:
     """
-    this function will parse tweets json into a pandas dataframe
+    this class will parse tweets json into a pandas dataframe
     
     Return
     ------
@@ -44,7 +44,7 @@ class Tweet_df:
     
     def find_sentiments(self, text)->list:
         
-        return polarity, self.subjectivity
+        return polarity, subjectivity
 
     def find_created_time(self)->list:
        
