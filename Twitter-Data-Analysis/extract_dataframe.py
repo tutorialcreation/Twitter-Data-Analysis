@@ -1,4 +1,5 @@
 import json
+from textblob import TextBlob
 
 class ExtractTweets:
     """
@@ -23,3 +24,11 @@ class ExtractTweets:
         """
         return list(map(lambda tweet: tweet['text'], self.tweets))
         
+
+    def find_sentiments(self, data:list)->list:
+        """
+        - this function finds sentiments from the dataset
+        """
+        get_polarity = [TextBlob(text).sentiment.polarity for text in data]
+        get_subjectivity = [TextBlob(text).sentiment.subjectivity for text in data]
+        return get_polarity, get_subjectivity
