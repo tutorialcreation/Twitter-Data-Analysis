@@ -18,8 +18,8 @@ class ExtractTweets:
     
     def find_full_text(self)->list:
         """
-        - this function finds the full text of the 
-        scope on
+        - this function extracts the full texts of
+        the tweets
         """
         return list(map(lambda tweet: tweet['text'], self.tweets))
         
