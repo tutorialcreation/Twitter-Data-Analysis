@@ -10,17 +10,6 @@ class ExtractTweets:
             data.append(json.loads(tweets))
         self.tweets = data
 
-    
-    def read_json(json_file: str)->list:
-        """
-        - this function returns json data in
-        the form of a list of dictionaries
-        """
-        data = []
-        for tweets in open(json_file,'r'):
-            data.append(json.loads(tweets))
-        return data
-
     def find_statuses_count(self)->list:
         """
         - this function returns the status counts
