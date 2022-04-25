@@ -15,3 +15,11 @@ class ExtractTweets:
         - this function returns the status counts
         """
         return list(map(lambda tweet: tweet['user']['statuses_count'], self.tweets))
+    
+    def find_full_text(self)->list:
+        """
+        - this function finds the full text of the 
+        scope on
+        """
+        return list(map(lambda tweet: tweet['text'], self.tweets))
+        
