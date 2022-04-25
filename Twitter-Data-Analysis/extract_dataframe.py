@@ -32,3 +32,10 @@ class ExtractTweets:
         get_polarity = [TextBlob(text).sentiment.polarity for text in data]
         get_subjectivity = [TextBlob(text).sentiment.subjectivity for text in data]
         return get_polarity, get_subjectivity
+
+    def find_created_time(self)->list:
+        """
+        - this function returns a list of 
+        the created time tags for when the tweet was generated
+        """
+        return  list(map(lambda tweet: tweet['created_at'], self.tweets))
