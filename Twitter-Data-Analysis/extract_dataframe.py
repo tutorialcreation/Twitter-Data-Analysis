@@ -138,8 +138,10 @@ class ExtractTweets:
         hashtags = self.find_hashtags()
         mentions = self.find_mentions()
         location = self.find_location()
-        data = zip(created_at, source, text, polarity, subjectivity, lang, fav_count, retweet_count, screen_name, follower_count, friends_count, sensitivity, hashtags, mentions, location)
-        df = pd.DataFrame(data=data, columns=columns)
+        values = [created_at, source, text, polarity, subjectivity, lang, fav_count, retweet_count, screen_name, follower_count, friends_count, sensitivity, hashtags, mentions, location]
+        data_ = dict(zip(columns,values))
+        data  = { key:pd.Series(value) for key, value in data_.items() }
+        df = pd.DataFrame(data=data)
         
         if save:
             df.to_csv('processed_tweet_data.csv', index=False)
