@@ -13,6 +13,10 @@ class ExtractTweets:
             data.append(json.loads(tweets))
         self.tweets = data
 
+    def get_tweets(self):
+        """just a basic function of getting tweets"""
+        return self.tweets
+
     def find_statuses_count(self)->list:
         """
         - this function returns the status counts
