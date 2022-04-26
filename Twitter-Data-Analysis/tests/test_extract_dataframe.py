@@ -78,7 +78,15 @@ class TestExtractTweeets(unittest.TestCase):
         for follower in followers_count:
             self.assertIsInstance(follower,(int))
     
+    def test_find_friends_count(self):
+        """
+        - tests the find friends counts function
+        """
+        friends_count = self.tweets.find_friends_count()
+        for friend in friends_count:
+            self.assertIsInstance(friend,(int))
         
+    
 if __name__ == '__main__':
 	unittest.main()
 
