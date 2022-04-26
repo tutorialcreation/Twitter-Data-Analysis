@@ -1,9 +1,5 @@
 import unittest
 import pandas as pd
-import sys, os
- 
-sys.path.append(os.path.abspath(os.path.join('../..')))
-
 from extract_dataframe import ExtractTweets
 
 
@@ -19,9 +15,19 @@ class TestExtractTweeets(unittest.TestCase):
 
 
     def setUp(self) -> pd.DataFrame:
+        """
+        - this function tests the setup for the environment
+        """
         self.tweets = ExtractTweets("/home/martin/Documents/Dscience/Economic_Twitter_Data.json")
         self.df = self.tweets.get_tweet_df(save=False)
 
+    def test_find_statuses_count(self):
+        """
+        -this function tests the status count function
+        """
+        status_counts = self.tweets.find_statuses_count()
+        for status_count in status_counts:
+            self.assertIsInstance(status_count,(int))
 
     
 if __name__ == '__main__':
