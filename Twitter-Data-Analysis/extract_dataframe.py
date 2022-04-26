@@ -144,7 +144,7 @@ class ExtractTweets:
         df = pd.DataFrame(data=data)
         
         if save:
-            df.to_csv('processed_tweet_data.csv', index=False)
+            df.to_csv('data/processed_tweet_data.csv', index=False)
             print('File Successfully Saved.!!!')
             
         return df
