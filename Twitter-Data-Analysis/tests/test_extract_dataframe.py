@@ -102,6 +102,14 @@ class TestExtractTweeets(unittest.TestCase):
         favorites = self.tweets.find_favourite_count()
         for favorite in favorites:
             self.assertIsInstance(favorite,(int))
+    
+    def test_find_retweet_count(self):
+        """
+        - tests the find retweet function
+        """
+        retweets = self.tweets.find_retweet_count()
+        for retweet in retweets:
+            self.assertIsInstance(retweet,(int))
 
 if __name__ == '__main__':
 	unittest.main()
