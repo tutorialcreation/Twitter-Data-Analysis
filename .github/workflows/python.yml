@@ -6,11 +6,12 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+      - run: cd Twitter-Data-Analysis
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
       - name: Install requirements
         run: pip install -r requirements.txt
       - name: Run tests
-        run: python -m unittest Twitter-Data-Analysis/tests/*
+        run: python -m unittest tests/*
       
