@@ -46,7 +46,8 @@ class TweetCleanser:
     
     def remove_non_english_tweets(self,df:pd.DataFrame)->pd.DataFrame:
         """
-        remove non english tweets from lang
+        remove non english tweets from lang that is the language 
+        column
         """
         self.df = self.df[self.df['lang'].str.contains("en")]
         return self.df
