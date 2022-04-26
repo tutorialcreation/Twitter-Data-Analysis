@@ -86,7 +86,16 @@ class TestExtractTweeets(unittest.TestCase):
         for friend in friends_count:
             self.assertIsInstance(friend,(int))
         
-    
+    def test_find_is_sensitive(self):
+        """
+        - tests the finding is sensitive function
+        """
+        is_sensitive = self.tweets.is_sensitive()
+        for is_sensitive_response in is_sensitive:
+            self.assertIsInstance(is_sensitive_response,(None,str))
+        
+
+
 if __name__ == '__main__':
 	unittest.main()
 
