@@ -91,7 +91,7 @@ class TestExtractTweeets(unittest.TestCase):
         is_sensitive = self.tweets.is_sensitive()
         for is_sensitive_response in is_sensitive:
             if is_sensitive_response:
-                self.assertIsInstance(is_sensitive_response,(str,))
+                self.assertIsInstance(is_sensitive_response,(bool,))
             
         
     def test_find_favourite_count(self):
