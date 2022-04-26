@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 from extract_dataframe import ExtractTweets
-
+import zipfile
 
 
 
@@ -16,7 +16,8 @@ class TestExtractTweeets(unittest.TestCase):
         """
         - this function tests the setup for the environment
         """
-        self.tweets = ExtractTweets("/home/martin/Documents/Dscience/Economic_Twitter_Data.json")
+        
+        self.tweets = ExtractTweets("data/Economic_Twitter_Data.json")
         self.df = self.tweets.get_tweet_df(save=False)
 
     def test_find_statuses_count(self):
