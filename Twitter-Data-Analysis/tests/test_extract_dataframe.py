@@ -29,7 +29,14 @@ class TestExtractTweeets(unittest.TestCase):
         for status_count in status_counts:
             self.assertIsInstance(status_count,(int))
 
-    
+    def test_find_full_text(self):
+        """
+        - test the text results
+        """
+        for text in self.tweets.find_full_text():
+            self.assertIsInstance(text, (str))
+
+
 if __name__ == '__main__':
 	unittest.main()
 
