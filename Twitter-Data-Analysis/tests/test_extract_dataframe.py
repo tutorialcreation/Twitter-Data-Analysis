@@ -1,4 +1,5 @@
 import unittest
+import pandas as pd
 from extract_dataframe import ExtractTweets
 
 
@@ -90,10 +91,8 @@ class TestExtractTweeets(unittest.TestCase):
         is_sensitive = self.tweets.is_sensitive()
         for is_sensitive_response in is_sensitive:
             if is_sensitive_response:
-                self.assertIsInstance(is_sensitive_response,(str))
-            else:
-                self.assertIsInstance(is_sensitive_response,(None))
-        
+                self.assertIsInstance(is_sensitive_response,(str,))
+            
         
     def test_find_favourite_count(self):
         """
@@ -101,7 +100,7 @@ class TestExtractTweeets(unittest.TestCase):
         """
         favorites = self.tweets.find_favourite_count()
         for favorite in favorites:
-            self.assertIsInstance(favorite,(int))
+            self.assertIsInstance(favorite,(int,))
     
     def test_find_retweet_count(self):
         """
@@ -118,10 +117,7 @@ class TestExtractTweeets(unittest.TestCase):
         locations = self.tweets.find_location()
         for location in locations:
             if location:
-                self.assertIsInstance(location,(str))
-            else:
-                self.assertIsInstance(location,(None))
-        
+                self.assertIsInstance(location,(str,))
 
 
 if __name__ == '__main__':
