@@ -18,7 +18,16 @@ class TestTweetCleanser(unittest.TestCase):
         
     def test_drop_unwanted_column(self, df:pd.DataFrame)->pd.DataFrame:
         """
-        - this functino tests the drop unwanted columns
+        - this function tests the drop unwanted columns
         """
-        self.assertIsInstance(self.df_cleanser.drop_duplicate(df),(pd.DataFrame))
+        self.assertLess(len(self.df.columns),len(self.df_cleanser.drop_unwanted_column(df).columns))
+    
+    
+    def test_drop_duplicate(self, df:pd.DataFrame)->pd.DataFrame:
+        """
+        - this function tests the drop duplicates function
+        """
+        self.assertLess(len(self.df),len(self.df_cleanser.drop_duplicate(self.df)))
+    
+
     
