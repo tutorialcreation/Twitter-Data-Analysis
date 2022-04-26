@@ -92,7 +92,10 @@ class TestExtractTweeets(unittest.TestCase):
         """
         is_sensitive = self.tweets.is_sensitive()
         for is_sensitive_response in is_sensitive:
-            self.assertIsInstance(is_sensitive_response,(None,str,))
+            if is_sensitive_response:
+                self.assertIsInstance(is_sensitive_response,(str))
+            else:
+                self.assertIsInstance(is_sensitive_response,(None))
         
         
     def test_find_favourite_count(self):
@@ -110,6 +113,19 @@ class TestExtractTweeets(unittest.TestCase):
         retweets = self.tweets.find_retweet_count()
         for retweet in retweets:
             self.assertIsInstance(retweet,(int))
+
+    def test_find_location(self):
+        """
+        - tests the find location function
+        """
+        locations = self.tweets.find_location()
+        for location in locations:
+            if location:
+                self.assertIsInstance(location,(str))
+            else:
+                self.assertIsInstance(location,(None))
+        
+
 
 if __name__ == '__main__':
 	unittest.main()
