@@ -1,11 +1,8 @@
 import unittest
-import pandas as pd
 from extract_dataframe import ExtractTweets
 
 
 
-columns = ['created_at', 'source', 'original_text','clean_text', 'sentiment','polarity','subjectivity', 'lang', 'favorite_count', 'retweet_count', 
-    'original_author', 'screen_count', 'followers_count','friends_count','possibly_sensitive', 'hashtags', 'user_mentions', 'place', 'place_coord_boundaries']
 
 
 class TestExtractTweeets(unittest.TestCase):
