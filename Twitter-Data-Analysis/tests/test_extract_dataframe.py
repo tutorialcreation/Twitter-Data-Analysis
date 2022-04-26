@@ -36,7 +36,43 @@ class TestExtractTweeets(unittest.TestCase):
         for text in self.tweets.find_full_text():
             self.assertIsInstance(text, (str))
 
+    def test_find_sentiments(self):
+        """
+        - testing finding the sentiments
+        """
+        polarity,subjectivity = self.tweets.find_sentiments(self.tweets.find_full_text())
+        for i,_ in enumerate(polarity):
+            self.assertIsInstance(polarity[i], (int,float))
+            self.assertIsInstance(subjectivity[i], (int,float))
 
+    def test_find_created_time(self):
+        """
+        - testing finding created time 
+        """
+        string_dates = self.tweets.find_created_time()
+        for date in string_dates:
+            self.assertIsInstance(date, (str))
+
+    def test_find_source(self):
+        """
+        - tests the find sources function
+        """
+        sources = self.tweets.find_source()
+        for source in sources:
+            self.assertEqual("href" in source,True)
+    
+    def test_find_screen_name(self):
+        """
+        - tests the find screen names
+        """
+        screen_names = self.tweets.find_screen_name()
+        for name in screen_names:
+            self.assertIsInstance(name,(str))
+    
+    
+
+    
+        
 if __name__ == '__main__':
 	unittest.main()
 
