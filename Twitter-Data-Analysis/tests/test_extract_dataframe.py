@@ -92,9 +92,16 @@ class TestExtractTweeets(unittest.TestCase):
         """
         is_sensitive = self.tweets.is_sensitive()
         for is_sensitive_response in is_sensitive:
-            self.assertIsInstance(is_sensitive_response,(None,str))
+            self.assertIsInstance(is_sensitive_response,(None,str,))
         
-
+        
+    def test_find_favourite_count(self):
+        """
+        - tests the finding favorite count function
+        """
+        favorites = self.tweets.find_favourite_count()
+        for favorite in favorites:
+            self.assertIsInstance(favorite,(int))
 
 if __name__ == '__main__':
 	unittest.main()
