@@ -17,7 +17,14 @@ class TweetCleanser:
         unwanted_rows = df[df['retweet_count'] == 'retweet_count' ].index
         df.drop(unwanted_rows , inplace=True)
         df = df[df['polarity'] != 'polarity']
+        return df
         
-        return df    
-
+    
+    def drop_duplicate(self, df:pd.DataFrame)->pd.DataFrame:
+        """
+        - this function drop duplicate rows
+        """
+        df = df.drop_duplicates(subset=['original_text'])
+        return df
+        
     
