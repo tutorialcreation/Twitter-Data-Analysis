@@ -69,8 +69,14 @@ class TestExtractTweeets(unittest.TestCase):
         for name in screen_names:
             self.assertIsInstance(name,(str))
     
-    
 
+    def test_find_followers_count(self):
+        """
+        - tests the find follower counts function
+        """
+        followers_count = self.tweets.find_followers_count()
+        for follower in followers_count:
+            self.assertIsInstance(follower,(int))
     
         
 if __name__ == '__main__':
