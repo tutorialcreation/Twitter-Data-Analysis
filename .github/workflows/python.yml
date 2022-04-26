@@ -12,5 +12,9 @@ jobs:
       - name: Install requirements
         run: pip install -r requirements.txt
       - name: Run tests
+<<<<<<< HEAD
         run: python -m unittest test_*
+=======
+        run: python -m unittest tests/*
+>>>>>>> 4b1ef4e8b08800a32c95411f3d6c9508a695097f
       
