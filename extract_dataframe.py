@@ -156,5 +156,5 @@ class ExtractTweets:
 
 if __name__ == "__main__":
 
-    extracted_tweets = ExtractTweets("C:/Users/User/Documents/DScience/Twitter-Data-Analysis-One/data/Economic_Twitter_Data.json")
+    extracted_tweets = ExtractTweets("data/Economic_Twitter_Data.json")
     df = extracted_tweets.get_tweet_df(save=True)
