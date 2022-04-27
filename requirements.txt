@@ -24,6 +24,8 @@ fastjsonschema==2.15.3
 filelock==3.0.12
 flatbuffers==2.0
 fonttools==4.33.2
+funcy==1.17
+future==0.18.2
 gast==0.5.3
 gensim==4.1.2
 google-auth==2.6.6
@@ -63,6 +65,7 @@ nbformat==5.3.0
 nest-asyncio==1.5.5
 nltk==3.7
 notebook==6.4.11
+numexpr==2.8.1
 numpy==1.21.6
 oauthlib==3.2.0
 opt-einsum==3.3.0
@@ -82,7 +85,9 @@ ptyprocess==0.7.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.21
+pyenchant==3.2.2
 Pygments==2.12.0
+pyLDAvis==3.3.1
 pyparsing==3.0.8
 pyrsistent==0.18.1
 python-dateutil==2.8.2
@@ -99,6 +104,7 @@ scipy==1.7.3
 seaborn==0.11.2
 Send2Trash==1.8.0
 six==1.15.0
+sklearn==0.0
 smart-open==6.0.0
 soupsieve==2.3.2.post1
 tensorboard==2.8.0
