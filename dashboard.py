@@ -34,19 +34,14 @@ from scipy.stats import uniform
 from scipy.sparse import csr_matrix
 from extract_dataframe import ExtractTweets
 from clean_tweets_dataframe import TweetCleanser
-from sqlalchemy import types, create_engine
-import pymysql
+from database import DBOps
 
 #######################
 #- Database connections
 ######################
 
-try:
-    conn = create_engine('mysql+pymysql://user:pass@IP/database_name')
-    print("MySQL Connection Sucessfull!!!!!!!!!!!")
-except Exception as err:
-	print("MySQL Connection Failed !!!!!!!!!!!")
-	print(err)
+engine = DBOps(is_online=True)
+
 
 # setting the title of the dashboard
 st.title("Topic Modeling And Sentiment Analysis For Tweets")
@@ -59,8 +54,12 @@ st.sidebar.title('Analysis and Modeling of Tweets')
 # Retrieving Dataset #
 ######################
 
+#3.- Read data with pandas
+
+
+
 extracted_tweets = ExtractTweets("data/Economic_Twitter_Data.json")
-df = extracted_tweets.get_tweet_df(save=False)
+df = pd.read_sql('select * from userData',engine.get_engine())
 df.dropna()
 
 
@@ -91,6 +90,10 @@ if st.sidebar.checkbox("Show Summary Statistics"):
 if st.sidebar.checkbox("Data Types"):
     st.write(df_.info())
 
+user = st.sidebar.selectbox("View specific users data",
+set(df['original_author']))
+user_df = df_[df_['original_author']==user]
+st.write(user_df)
 
 ##########################
 # Exploratory Data Analysis
@@ -102,3 +105,37 @@ column = st.sidebar.selectbox(
     'Which variable would you like to explore',
     (df_.columns)
 )
+
+hashtags = df_[df_['hashtags'].map(lambda x: len(x[0])) > 0]
+flattened_hash_dataframes = pd.DataFrame(
+    [hashtag for hashtags_list in hashtags.hashtags
+    for hashtag in eval(hashtags_list)],
+    columns=['hashtag'])
+
+df_['all_hashtags'] = flattened_hash_dataframes
+
+top_x = st.sidebar.text_input("Top 'x' tweets",10)
+
+if top_x:
+    st.bar_chart(df_['all_hashtags'].value_counts()[:int(top_x)])
+
+
+# plotting tweets by language
+# first of all get the tweets by language
+tweets_df = pd.DataFrame(columns = ['original_text','lang'])
+tweets_df['text'] = df['original_text'].to_list()
+tweets_df['lang'] = df['lang'].to_list()
+tweets_according_language = tweets_df['lang'].value_counts()
+top_x = st.sidebar.text_input("Top 'x' languages",10)
+
+fig,ax = plt.subplots()
+ax.tick_params(axis='x',labelsize=10)
+ax.tick_params(axis='y',labelsize=10)
+ax.set_xlabel("Languages")
+ax.set_ylabel("Frequency")
+ax.set_title("The 10 Most Frequent Used Languages In Tweets")
+tweets_according_language[:int(top_x)].plot(ax=ax,kind='bar',color='green')
+
+
+if top_x:
+    st.pyplot(fig)

@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 class TweetCleanser:
     """
@@ -51,6 +52,10 @@ class TweetCleanser:
         """
         self.df = self.df[self.df['lang'].str.contains("en")]
         return self.df
+
+    def get_hashtags(self,tweet):
+        '''This function will extract hashtags'''
+        return re.findall('(#[A-Za-z]+[A-Za-z0-9-_]+)', tweet)
 
     def save_changes(self)->pd.DataFrame:
         self.df.to_csv("data/cleaned_data.csv",index=False)
