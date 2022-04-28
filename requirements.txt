@@ -152,4 +152,3 @@ zipp==3.4.0
 coverage
 sqlalchemy
 PyMySQL
-streamlit
