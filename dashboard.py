@@ -34,10 +34,24 @@ from scipy.stats import uniform
 from scipy.sparse import csr_matrix
 from extract_dataframe import ExtractTweets
 from clean_tweets_dataframe import TweetCleanser
+from sqlalchemy import types, create_engine
+
+"""
+- Database connections
+"""
+
+
+try:
+    conn = create_engine('mysql+pymysql://user:pass@IP/database_name')
+    print("MySQL Connection Sucessfull!!!!!!!!!!!")
+except Exception as err:
+	print("MySQL Connection Failed !!!!!!!!!!!")
+	print(err)
 
 # setting the title of the dashboard
 st.title("Topic Modeling And Sentiment Analysis For Tweets")
 
+st.sidebar.title('Analysis and Modeling of Tweets')
 """
 - Retrieving Dataset
 """
@@ -65,4 +79,4 @@ df_ = cleanser.remove_non_english_tweets(df)
 """
 - Exploratory Data Analysis
 """
-st.write(df_.head())
+st.dataframe(df_)
