@@ -1,3 +1,4 @@
+from bleach import clean
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -120,22 +121,18 @@ if top_x:
     st.bar_chart(df_['all_hashtags'].value_counts()[:int(top_x)])
 
 
-# plotting tweets by language
-# first of all get the tweets by language
-tweets_df = pd.DataFrame(columns = ['original_text','lang'])
-tweets_df['text'] = df['original_text'].to_list()
-tweets_df['lang'] = df['lang'].to_list()
-tweets_according_language = tweets_df['lang'].value_counts()
-top_x = st.sidebar.text_input("Top 'x' languages",10)
+# cleaning text
+df_['clean_text'] = df_['original_text'].apply(cleanser.clean_text)
+df_['clean_text'] = df_['clean_text'].astype(str)
+df_['clean_text'] = df_['clean_text'].apply(lambda x:x.lower())
+df_['clean_text'] = df_['clean_text'].apply(lambda x: x.translate(str.maketrans(' ', ' ', string.punctuation)))
 
-fig,ax = plt.subplots()
-ax.tick_params(axis='x',labelsize=10)
-ax.tick_params(axis='y',labelsize=10)
-ax.set_xlabel("Languages")
-ax.set_ylabel("Frequency")
-ax.set_title("The 10 Most Frequent Used Languages In Tweets")
-tweets_according_language[:int(top_x)].plot(ax=ax,kind='bar',color='green')
-
-
-if top_x:
+st.sidebar.text("Fine Tune Word Cloud")
+x = st.sidebar.text_input("x",1400)
+y = st.sidebar.text_input("y",600)
+if x and y:
+    fig,ax = plt.subplots()
+    ax.imshow(WordCloud(width=1500,height=600,stopwords=STOPWORDS).generate(' '.join(df_['clean_text'].values)))
+    ax.axis('off')
+    ax.set_title("The most frequent words in the tweets",fontsize=18)
     st.pyplot(fig)

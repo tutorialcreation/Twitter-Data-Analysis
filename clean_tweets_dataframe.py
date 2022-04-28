@@ -1,11 +1,16 @@
 import pandas as pd
 import re
+import enchant
+
+
 
 class TweetCleanser:
     """
     -this class cleans the tweets and
     ensures that the data is easy to work with
     """
+    en_us = enchant.Dict("en_US")
+
     def __init__(self, df:pd.DataFrame):
         self.df = df
         print('Automation in Action...!!!')
@@ -60,6 +65,9 @@ class TweetCleanser:
     def save_changes(self)->pd.DataFrame:
         self.df.to_csv("data/cleaned_data.csv",index=False)
 
+    def clean_text(self,tweet):
+        """this function cleans the original text"""
+        return ' '.join(w for w in tweet.split() if self.en_us.check(w))
 
 if __name__ == "__main__":
     df = pd.read_csv("data/processed_tweet_data.csv")
