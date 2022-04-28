@@ -151,3 +151,4 @@ wrapt==1.14.0
 zipp==3.4.0
 coverage
 sqlalchemy
+PyMySQL

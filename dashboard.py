@@ -35,11 +35,11 @@ from scipy.sparse import csr_matrix
 from extract_dataframe import ExtractTweets
 from clean_tweets_dataframe import TweetCleanser
 from sqlalchemy import types, create_engine
+import pymysql
 
-"""
-- Database connections
-"""
-
+#######################
+#- Database connections
+######################
 
 try:
     conn = create_engine('mysql+pymysql://user:pass@IP/database_name')
@@ -52,18 +52,22 @@ except Exception as err:
 st.title("Topic Modeling And Sentiment Analysis For Tweets")
 
 st.sidebar.title('Analysis and Modeling of Tweets')
-"""
-- Retrieving Dataset
-"""
-# retrieving the dataframe
+
+
+
+######################
+# Retrieving Dataset #
+######################
+
 extracted_tweets = ExtractTweets("data/Economic_Twitter_Data.json")
 df = extracted_tweets.get_tweet_df(save=False)
 df.dropna()
 
 
-"""
-- Data PreProcessing
-"""
+#######################
+# Data PreProcessing
+#####################
+
 # cleaning the dataframe
 cleanser = TweetCleanser(df)
 # drop unwanted columns
@@ -75,8 +79,26 @@ cleanser.convert_to_datetime(df)
 # remove non english texts
 df_ = cleanser.remove_non_english_tweets(df)
 
+st.sidebar.subheader("Data Overview")
 
-"""
-- Exploratory Data Analysis
-"""
-st.dataframe(df_)
+if st.sidebar.checkbox("Display Data"):
+    st.write(df_.head(20))
+
+
+if st.sidebar.checkbox("Show Summary Statistics"):
+    st.dataframe(df_.describe())
+
+if st.sidebar.checkbox("Data Types"):
+    st.write(df_.info())
+
+
+##########################
+# Exploratory Data Analysis
+############################
+
+st.sidebar.subheader("Expolatory Data Analysis")
+
+column = st.sidebar.selectbox(
+    'Which variable would you like to explore',
+    (df_.columns)
+)
