@@ -1,10 +1,16 @@
 import pandas as pd
+import re
+import enchant
+
+
 
 class TweetCleanser:
     """
     -this class cleans the tweets and
     ensures that the data is easy to work with
     """
+    en_us = enchant.Dict("en_US")
+
     def __init__(self, df:pd.DataFrame):
         self.df = df
         print('Automation in Action...!!!')
@@ -52,9 +58,16 @@ class TweetCleanser:
         self.df = self.df[self.df['lang'].str.contains("en")]
         return self.df
 
+    def get_hashtags(self,tweet):
+        '''This function will extract hashtags'''
+        return re.findall('(#[A-Za-z]+[A-Za-z0-9-_]+)', tweet)
+
     def save_changes(self)->pd.DataFrame:
         self.df.to_csv("data/cleaned_data.csv",index=False)
 
+    def clean_text(self,tweet):
+        """this function cleans the original text"""
+        return ' '.join(w for w in tweet.split() if self.en_us.check(w))
 
 if __name__ == "__main__":
     df = pd.read_csv("data/processed_tweet_data.csv")

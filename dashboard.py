@@ -1,3 +1,4 @@
+from bleach import clean
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -34,36 +35,38 @@ from scipy.stats import uniform
 from scipy.sparse import csr_matrix
 from extract_dataframe import ExtractTweets
 from clean_tweets_dataframe import TweetCleanser
-from sqlalchemy import types, create_engine
+from database import DBOps
 
-"""
-- Database connections
-"""
+#######################
+#- Database connections
+######################
 
+engine = DBOps(is_online=True)
 
-try:
-    conn = create_engine('mysql+pymysql://user:pass@IP/database_name')
-    print("MySQL Connection Sucessfull!!!!!!!!!!!")
-except Exception as err:
-	print("MySQL Connection Failed !!!!!!!!!!!")
-	print(err)
 
 # setting the title of the dashboard
 st.title("Topic Modeling And Sentiment Analysis For Tweets")
 
 st.sidebar.title('Analysis and Modeling of Tweets')
-"""
-- Retrieving Dataset
-"""
-# retrieving the dataframe
-extracted_tweets = ExtractTweets("data/Economic_Twitter_Data.json")
-df = extracted_tweets.get_tweet_df(save=False)
+
+
+
+######################
+# Retrieving Dataset #
+######################
+
+#3.- Read data with pandas
+
+
+
+df = pd.read_sql('select * from userData',engine.get_engine())
 df.dropna()
 
 
-"""
-- Data PreProcessing
-"""
+#######################
+# Data PreProcessing
+#####################
+
 # cleaning the dataframe
 cleanser = TweetCleanser(df)
 # drop unwanted columns
@@ -75,8 +78,61 @@ cleanser.convert_to_datetime(df)
 # remove non english texts
 df_ = cleanser.remove_non_english_tweets(df)
 
+st.sidebar.subheader("Data Overview")
 
-"""
-- Exploratory Data Analysis
-"""
-st.dataframe(df_)
+if st.sidebar.checkbox("Display Data"):
+    st.write(df_.head(20))
+
+
+if st.sidebar.checkbox("Show Summary Statistics"):
+    st.dataframe(df_.describe())
+
+if st.sidebar.checkbox("Data Types"):
+    st.write(df_.info())
+
+user = st.sidebar.selectbox("View specific users data",
+set(df['original_author']))
+user_df = df_[df_['original_author']==user]
+st.write(user_df)
+
+##########################
+# Exploratory Data Analysis
+############################
+
+st.sidebar.subheader("Expolatory Data Analysis")
+
+column = st.sidebar.selectbox(
+    'Which variable would you like to explore',
+    (df_.columns)
+)
+
+hashtags = df_[df_['hashtags'].map(lambda x: len(x[0])) > 0]
+flattened_hash_dataframes = pd.DataFrame(
+    [hashtag for hashtags_list in hashtags.hashtags
+    for hashtag in eval(hashtags_list)],
+    columns=['hashtag'])
+
+df_['all_hashtags'] = flattened_hash_dataframes
+
+top_x = st.sidebar.text_input("Top 'x' tweets",10)
+
+if top_x:
+    st.subheader(f"The {top_x} most frequent tweets")
+    st.bar_chart(df_['all_hashtags'].value_counts()[:int(top_x)])
+
+
+# cleaning text
+df_['clean_text'] = df_['original_text'].apply(cleanser.clean_text)
+df_['clean_text'] = df_['clean_text'].astype(str)
+df_['clean_text'] = df_['clean_text'].apply(lambda x:x.lower())
+df_['clean_text'] = df_['clean_text'].apply(lambda x: x.translate(str.maketrans(' ', ' ', string.punctuation)))
+
+st.sidebar.text("Fine Tune Word Cloud")
+x = st.sidebar.text_input("x",1400)
+y = st.sidebar.text_input("y",600)
+if x and y:
+    fig,ax = plt.subplots()
+    ax.imshow(WordCloud(width=1500,height=600,stopwords=STOPWORDS).generate(' '.join(df_['clean_text'].values)))
+    ax.axis('off')
+    ax.set_title("The most frequent words in the tweets",fontsize=18)
+    st.pyplot(fig)
