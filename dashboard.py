@@ -59,7 +59,6 @@ st.sidebar.title('Analysis and Modeling of Tweets')
 
 
 
-extracted_tweets = ExtractTweets("data/Economic_Twitter_Data.json")
 df = pd.read_sql('select * from userData',engine.get_engine())
 df.dropna()
 
