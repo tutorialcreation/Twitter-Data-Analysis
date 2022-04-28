@@ -17,7 +17,7 @@ class TestExtractTweeets(unittest.TestCase):
         - this function tests the setup for the environment
         """
         
-        self.tweets = ExtractTweets("data/Economic_Twitter_Data.json")
+        self.tweets = ExtractTweets("data/Economic_Twitter_Data_minified.json")
         self.df = self.tweets.get_tweet_df(save=False)
 
     def test_find_statuses_count(self):
