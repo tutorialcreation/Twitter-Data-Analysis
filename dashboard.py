@@ -118,6 +118,7 @@ df_['all_hashtags'] = flattened_hash_dataframes
 top_x = st.sidebar.text_input("Top 'x' tweets",10)
 
 if top_x:
+    st.subheader("The most frequent tweets")
     st.bar_chart(df_['all_hashtags'].value_counts()[:int(top_x)])
 
 
