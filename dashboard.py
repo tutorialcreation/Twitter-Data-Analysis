@@ -122,7 +122,7 @@ if top_x:
 
 
 # cleaning text
-df_['clean_text'] = df_['original_text'].apply(cleanser.clean_text)
+# df_['clean_text'] = df_['original_text'].apply(cleanser.clean_text)
 df_['clean_text'] = df_['clean_text'].astype(str)
 df_['clean_text'] = df_['clean_text'].apply(lambda x:x.lower())
 df_['clean_text'] = df_['clean_text'].apply(lambda x: x.translate(str.maketrans(' ', ' ', string.punctuation)))
