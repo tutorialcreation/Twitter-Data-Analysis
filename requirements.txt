@@ -153,3 +153,4 @@ coverage
 sqlalchemy
 PyMySQL
 pyLDAvis
+pyenchant
