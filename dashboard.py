@@ -136,3 +136,56 @@ if x and y:
     ax.axis('off')
     ax.set_title("The most frequent words in the tweets",fontsize=18)
     st.pyplot(fig)
+
+
+##################
+# Topic Modeling
+###################
+st.sidebar.subheader("Topic Modeling")
+
+sentences = [tweet for tweet in df_['clean_text']]
+words = [sentence.split() for sentence in sentences]
+word_to_id_dict = corpora.Dictionary(words)
+bag_of_words = [word_to_id_dict.doc2bow(tweet) for tweet in words]
+
+num_topics=st.sidebar.text_input("num topics",5)
+random_state=st.sidebar.text_input("random_state",100)
+update_every=st.sidebar.text_input("update_every",1)
+chunksize=st.sidebar.text_input("chunksize",100)
+passes=st.sidebar.text_input("passes",10)
+
+lda_model = LdaModel(bag_of_words,
+                    id2word=word_to_id_dict,
+                    num_topics=int(num_topics),
+                    random_state=int(random_state),
+                    update_every=int(update_every),
+                    chunksize=int(chunksize),
+                    passes=int(passes),
+                    alpha='auto',
+                    per_word_topics=True)
+
+perplexity = lda_model.log_perplexity(bag_of_words)
+# perplexity score
+st.subheader("Perplexity Score of Your Model")
+st.write(perplexity)
+
+coherence_model = CoherenceModel(model=lda_model,
+                              texts=words,
+                              dictionary=word_to_id_dict,
+                              coherence='c_v')
+coherence_lda = coherence_model.get_coherence()
+# coherence score
+st.subheader("Coherence Score of Your Model")
+st.write(coherence_lda)
+
+
+#####################
+# sentiment analysis
+#####################
+
+st.sidebar.subheader("Sentiment Analysis")
+
+sentiment = st.sidebar.radio(
+    "What sentiment would you like to analyze?",
+    ('negative', 'positive','neutral')
+)
