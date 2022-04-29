@@ -169,15 +169,6 @@ perplexity = lda_model.log_perplexity(bag_of_words)
 st.subheader("Perplexity Score of Your Model")
 st.write(perplexity)
 
-coherence_model = CoherenceModel(model=lda_model,
-                              texts=words,
-                              dictionary=word_to_id_dict,
-                              coherence='c_v')
-coherence_lda = coherence_model.get_coherence()
-# coherence score
-st.subheader("Coherence Score of Your Model")
-st.write(coherence_lda)
-
 
 #####################
 # sentiment analysis
@@ -189,3 +180,24 @@ sentiment = st.sidebar.radio(
     "What sentiment would you like to analyze?",
     ('negative', 'positive','neutral')
 )
+
+conditions = [df_.polarity < 0 , df_.polarity > 0,df_.polarity==0]
+choices = ['negative', 'positive','neutral']
+df_['sentiment'] = np.select(conditions, choices, default='zero')
+y = df_['sentiment']
+
+if sentiment:
+    sentiments = df[df['sentiment']==sentiment]
+    st.write(sentiments)
+
+vector = TfidfVectorizer(max_features=2000,min_df=6,max_df=0.5,stop_words=STOPWORDS)
+x = vector.fit_transform(df_['clean_text'])
+
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.3)
+linear_model = LinearSVC()
+linear_model.fit(x_train,y_train)
+
+y_predict = linear_model.predict(x_test)
+
+if st.sidebar.checkbox("show model report of sentiment analysis"):
+    st.write(classification_report(y_test,y_predict))
