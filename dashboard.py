@@ -136,3 +136,71 @@ if x and y:
     ax.axis('off')
     ax.set_title("The most frequent words in the tweets",fontsize=18)
     st.pyplot(fig)
+
+
+##################
+# Topic Modeling
+###################
+st.sidebar.subheader("Topic Modeling")
+
+sentences = [tweet for tweet in df_['clean_text']]
+words = [sentence.split() for sentence in sentences]
+word_to_id_dict = corpora.Dictionary(words)
+bag_of_words = [word_to_id_dict.doc2bow(tweet) for tweet in words]
+
+num_topics=st.sidebar.text_input("num topics",5)
+random_state=st.sidebar.text_input("random_state",100)
+update_every=st.sidebar.text_input("update_every",1)
+chunksize=st.sidebar.text_input("chunksize",100)
+passes=st.sidebar.text_input("passes",10)
+
+lda_model = LdaModel(bag_of_words,
+                    id2word=word_to_id_dict,
+                    num_topics=int(num_topics),
+                    random_state=int(random_state),
+                    update_every=int(update_every),
+                    chunksize=int(chunksize),
+                    passes=int(passes),
+                    alpha='auto',
+                    per_word_topics=True)
+
+perplexity = lda_model.log_perplexity(bag_of_words)
+# perplexity score
+st.subheader("Perplexity Score of Your Model")
+st.write(perplexity)
+
+
+#####################
+# sentiment analysis
+#####################
+
+st.sidebar.subheader("Sentiment Analysis")
+
+sentiment = st.sidebar.radio(
+    "What sentiment would you like to analyze?",
+    ('negative', 'positive','neutral')
+)
+
+conditions = [df_.polarity < 0 , df_.polarity > 0,df_.polarity==0]
+choices = ['negative', 'positive','neutral']
+df_['sentiment'] = np.select(conditions, choices, default='zero')
+y = df_['sentiment']
+
+if sentiment:
+    sentiments = df_[df_['sentiment']==sentiment]
+    st.write(sentiments)
+
+vector = TfidfVectorizer(max_features=2000,min_df=6,max_df=0.5,stop_words=STOPWORDS)
+x = vector.fit_transform(df_['clean_text'])
+
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.3)
+linear_model = LinearSVC()
+linear_model.fit(x_train,y_train)
+
+y_predict = linear_model.predict(x_test)
+
+
+if st.sidebar.checkbox("show classification model report"):
+    st.subheader("classification report of the model")
+    st.write(classification_report(y_test,y_predict))
+
