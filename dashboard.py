@@ -187,7 +187,7 @@ df_['sentiment'] = np.select(conditions, choices, default='zero')
 y = df_['sentiment']
 
 if sentiment:
-    sentiments = df[df['sentiment']==sentiment]
+    sentiments = df_[df_['sentiment']==sentiment]
     st.write(sentiments)
 
 vector = TfidfVectorizer(max_features=2000,min_df=6,max_df=0.5,stop_words=STOPWORDS)
@@ -199,5 +199,8 @@ linear_model.fit(x_train,y_train)
 
 y_predict = linear_model.predict(x_test)
 
-if st.sidebar.checkbox("show model report of sentiment analysis"):
+
+if st.sidebar.checkbox("show classification model report"):
+    st.subheader("classification report of the model")
     st.write(classification_report(y_test,y_predict))
+
